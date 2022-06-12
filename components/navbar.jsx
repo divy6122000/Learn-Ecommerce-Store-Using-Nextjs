@@ -8,7 +8,8 @@ import { FiMinusSquare, FiPlusSquare } from 'react-icons/fi';
 import Image from 'next/image';
 import { useRef } from 'react';
 
-const Navbar = () => {
+const Navbar = ({ addToCart, cart, removeFromCart, clearCart, total }) => {
+  // console.log(cart)
   const toggleCart = () => {
     if (ref.current.classList.contains('translate-x-full')) {
       ref.current.classList.remove('translate-x-full')
@@ -51,36 +52,37 @@ const Navbar = () => {
           </div>
         </div>
         {/* Item Content */}
-
-        <div className="items flex my-3 border-2 px-2 py-1  place-content-around bg-gray-200 rounded-md" >
-          <div className="logo ">
-            <Image src={'/tshirt.jpg'} width={75} height={90} className="object-top rounded" />
-          </div>
-          <div className="item-name ml-2 cursor-pointer hover:text-black transition delay-100">
-            <div className="item-name break-all">
-              Product nmae
+        {Object.keys(cart).length == 0 && <div className='text-center my-4 '>Your Cart Is Empty!</div>}
+        {Object.keys(cart).map((k) => {
+          return <div className="items flex my-3 border-2 px-2 py-1  place-content-around bg-gray-200 rounded-md" key={k}>
+            <div className="logo ">
+              <Image src={'/tshirt.jpg'} width={75} height={90} className="object-top rounded" />
             </div>
-            <div className="flex items-center place-content-around h-14">
-              <div className="qty flex items-center space-x-2">
-                <FiPlusSquare className='text-2xl  hover:text-pink-300 transition delay-100' />
-                <input type="number" name="" value={1} id="" className='w-8 border-2 text-center border-gray-400 rounded' />
-                <FiMinusSquare className='text-2xl  hover:text-pink-300 transition delay-100' />
+            <div className="item-name ml-2 cursor-pointer hover:text-black transition delay-100">
+              <div className="item-name break-all">
+                {cart[k].name}
               </div>
-              <div className="price hover:text-pink-300 font-semibold transition delay-100">
-                ₹ 499.00
+              <div className="flex items-center place-content-around h-14">
+                <div className="qty flex items-center space-x-2">
+                  <FiPlusSquare onClick={() => { addToCart(k, 1, cart[k].price, cart[k].name, cart[k].size, cart[k].variant) }} className='text-2xl  hover:text-pink-300 transition delay-100' />
+                  <input type="number" name="" value={cart[k].qty} id="" className='w-8 border-2 text-center border-gray-400 rounded' disabled={true} />
+                  <FiMinusSquare onClick={() => { removeFromCart(k, 1, cart[k].price, cart[k].name, cart[k].size, cart[k].variant) }} className='text-2xl  hover:text-pink-300 transition delay-100' />
+                </div>
+                <div className="price hover:text-pink-300 font-semibold transition delay-100">
+                  ₹ {cart[k].price}
+                </div>
               </div>
             </div>
+            <div className="remove my-1 cursor-pointer">
+              <BsTrash className='text-2xl text-red-700 hover:text-red-500 transition delay-100' />
+            </div>
           </div>
-          <div className="remove my-1 cursor-pointer">
-            <BsTrash className='text-2xl text-red-700 hover:text-red-500 transition delay-100' />
-          </div>
-        </div>
-
+        })}
         {/* Checkout & clear cart buttons  */}
         <div className='flex place-content-evenly'>
           <button className="flex mt-2 text-white bg-pink-500 border-0 py-1 px-3 focus:outline-none hover:bg-pink-600 rounded "> <BsFillBagCheckFill className='mt-1 mx-1' /> Checkout</button>
-
-          <button className="flex mt-2 text-white bg-pink-500 border-0 py-1 px-3 focus:outline-none hover:bg-pink-600 rounded "> <BsFillCartXFill className='mt-1 mx-1' />
+            <p className='invisible'>Ld</p>
+          <button onClick={clearCart} className="flex mt-2 text-white bg-pink-500 border-0 py-1 px-3 focus:outline-none hover:bg-pink-600 rounded "> <BsFillCartXFill className='mt-1 mx-1' />
             Clear Cart</button>
         </div>
       </div>
