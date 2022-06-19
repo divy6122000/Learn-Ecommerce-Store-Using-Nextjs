@@ -2,13 +2,14 @@
 import React from 'react'
 import Link from 'next/link'
 import { AiOutlineShoppingCart } from 'react-icons/ai';
+import { CgProfile } from 'react-icons/cg';
 import { GrClose } from 'react-icons/gr';
 import { BsTrash, BsFillBagCheckFill, BsFillCartXFill } from 'react-icons/bs';
 import { FiMinusSquare, FiPlusSquare } from 'react-icons/fi';
 import Image from 'next/image';
 import { useRef } from 'react';
 
-const Navbar = ({ addToCart, cart, removeFromCart, clearCart, total }) => {
+const Navbar = ({ addToCart, cart, removeFromCart, clearCart, subTotal }) => {
   // console.log(cart)
   const toggleCart = () => {
     if (ref.current.classList.contains('translate-x-full')) {
@@ -23,7 +24,7 @@ const Navbar = ({ addToCart, cart, removeFromCart, clearCart, total }) => {
   const ref = useRef(0)
   return (
     <>
-      <header className="text-gray-600 body-font shadow-md">
+      <header className="text-gray-600 body-font shadow-md sticky top-0 bg-white z-10">
         <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
           <Link href={'/'}><a className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
             <span className="text-2xl text-pink-500 font-bold">FASHION</span>
@@ -34,11 +35,12 @@ const Navbar = ({ addToCart, cart, removeFromCart, clearCart, total }) => {
             <Link href={'/stickers'}><a className="mr-5 uppercase font-bold hover:text-gray-900">Stickers</a></Link>
             <Link href={'/mugs'}><a className="mr-5 uppercase font-bold hover:text-gray-900">Mugs</a></Link>
           </nav>
+          <Link href={'/login'}><CgProfile className='text-2xl mx-2 cursor-pointer font-bold hover:text-gray-900' /></Link>
           <AiOutlineShoppingCart onClick={toggleCart} className='text-2xl cursor-pointer font-bold hover:text-gray-900' />
         </div>
 
       </header>
-      <div ref={ref} className="sidebar absolute top-0 right-0 bg-pink-200 px-3 py-4 w-auto z-10 transform transition-transform translate-x-full ">
+      <div ref={ref} className="sidebar h-[100vh] absolute top-0 right-0 bg-pink-200 px-3 py-4 w-auto z-10 transform transition-transform translate-x-full ">
         {/* Shopping Cart Title  */}
         <div className="flex items-center place-content-between">
           <div className='cursor-pointer'>
@@ -69,7 +71,8 @@ const Navbar = ({ addToCart, cart, removeFromCart, clearCart, total }) => {
                   <FiMinusSquare onClick={() => { removeFromCart(k, 1, cart[k].price, cart[k].name, cart[k].size, cart[k].variant) }} className='text-2xl  hover:text-pink-300 transition delay-100' />
                 </div>
                 <div className="price hover:text-pink-300 font-semibold transition delay-100">
-                  ₹ {cart[k].price}
+                  {/* ₹ {cart[k].price} */}
+                  ₹{subTotal}
                 </div>
               </div>
             </div>
@@ -80,8 +83,10 @@ const Navbar = ({ addToCart, cart, removeFromCart, clearCart, total }) => {
         })}
         {/* Checkout & clear cart buttons  */}
         <div className='flex place-content-evenly'>
-          <button className="flex mt-2 text-white bg-pink-500 border-0 py-1 px-3 focus:outline-none hover:bg-pink-600 rounded "> <BsFillBagCheckFill className='mt-1 mx-1' /> Checkout</button>
-            <p className='invisible'>Ld</p>
+          <Link href={'/checkout'}>
+            <button className="flex mt-2 text-white bg-pink-500 border-0 py-1 px-3 focus:outline-none hover:bg-pink-600 rounded "> <BsFillBagCheckFill className='mt-1 mx-1' /> Checkout</button>
+          </Link>
+          <p className='invisible'>Ld</p>
           <button onClick={clearCart} className="flex mt-2 text-white bg-pink-500 border-0 py-1 px-3 focus:outline-none hover:bg-pink-600 rounded "> <BsFillCartXFill className='mt-1 mx-1' />
             Clear Cart</button>
         </div>
