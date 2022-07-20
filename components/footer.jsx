@@ -9,7 +9,7 @@ const Footer = () => {
             <Link href={'/'}><a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
               <span className="text-2xl text-pink-500 font-bold">FASHION</span>
             </a></Link>
-            <p className="mt-2 text-sm text-gray-500">Air plant banjo lyft occupy retro adaptogen indego</p>
+            <p className="mt-2 text-sm text-gray-500">Online Shopping for Women, Men, Kids Fashion &amp; Lifestyle - FASHION</p>
           </div>
           <div className="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-10 md:text-left text-center">
             <div className="lg:w-1/4 md:w-1/2 w-full px-4">

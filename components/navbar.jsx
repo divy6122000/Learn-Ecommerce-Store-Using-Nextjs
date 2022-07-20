@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { CgProfile } from 'react-icons/cg';
@@ -9,8 +9,15 @@ import { FiMinusSquare, FiPlusSquare } from 'react-icons/fi';
 import Image from 'next/image';
 import { useRef } from 'react';
 
-const Navbar = ({ addToCart, cart, removeFromCart, clearCart, subTotal }) => {
+const Navbar = ({ logout,user, addToCart, cart, removeFromCart, clearCart, subTotal }) => {
   // console.log(cart)
+  const [dropdown, setDropdown] = useState(false)
+  const handleToggle = () => {
+    setDropdown(true)
+  }
+  const handleOut = () => {
+    setDropdown(false)
+  }
   const toggleCart = () => {
     if (ref.current.classList.contains('translate-x-full')) {
       ref.current.classList.remove('translate-x-full')
@@ -30,12 +37,22 @@ const Navbar = ({ addToCart, cart, removeFromCart, clearCart, subTotal }) => {
             <span className="text-2xl text-pink-500 font-bold">FASHION</span>
           </a></Link>
           <nav className="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-            <Link href={'/tshirt'}><a className="mr-5 uppercase font-bold hover:text-gray-900">Tshirts</a></Link>
-            <Link href={'/hoodies'}><a className="mr-5 uppercase font-bold hover:text-gray-900">Hoodies</a></Link>
-            <Link href={'/stickers'}><a className="mr-5 uppercase font-bold hover:text-gray-900">Stickers</a></Link>
-            <Link href={'/mugs'}><a className="mr-5 uppercase font-bold hover:text-gray-900">Mugs</a></Link>
+            <Link href={'/tshirt'}><a className="mr-5 uppercase font-bold hover:text-pink-600">Tshirts</a></Link>
+            <Link href={'/hoodies'}><a className="mr-5 uppercase font-bold hover:text-pink-600">Hoodies</a></Link>
+            <Link href={'/stickers'}><a className="mr-5 uppercase font-bold hover:text-pink-600">Stickers</a></Link>
+            <Link href={'/mugs'}><a className="mr-5 uppercase font-bold hover:text-pink-600">Shirts</a></Link>
           </nav>
-          <Link href={'/login'}><CgProfile className='text-2xl mx-2 cursor-pointer font-bold hover:text-gray-900' /></Link>
+          <a onMouseOver={handleToggle} onMouseLeave={handleOut} >
+            {user.value != null && <CgProfile onMouseOver={handleToggle} className='text-2xl mx-2 cursor-pointer font-bold hover:text-gray-900' />}
+            {dropdown == true && <div onMouseLeave={handleOut} className='bg-white absolute top-12 right-16 py-2 px-6 text-sm text-dark rounded-md mx-5'>
+              <ul>
+                <Link href={'/myaccount'}><a ><li className='py-1 hover:text-pink-500 font-bold'>My Account</li></a></Link>
+                <Link href={'/orders'}><a><li className='py-1 hover:text-pink-500 font-bold'>Orders</li></a></Link>
+                <li onClick={logout} className='py-1 hover:text-pink-500 cursor-pointer font-bold'>Logout</li>
+              </ul>
+            </div>}
+          </a>
+          {user.value == null && <Link href={'/login'}><a><button className='bg-pink-600 py-1 px-2 mx-2 text-sm text-white rounded-md'>Login</button></a></Link>}
           <AiOutlineShoppingCart onClick={toggleCart} className='text-2xl cursor-pointer font-bold hover:text-gray-900' />
         </div>
 
@@ -58,7 +75,7 @@ const Navbar = ({ addToCart, cart, removeFromCart, clearCart, subTotal }) => {
         {Object.keys(cart).map((k) => {
           return <div className="items flex my-3 border-2 px-2 py-1  place-content-around bg-gray-200 rounded-md" key={k}>
             <div className="logo ">
-              <Image src={'/tshirt.jpg'} width={75} height={90} className="object-top rounded" />
+              <img src={cart[k].img} width={75} height={90} className="object-top rounded" />
             </div>
             <div className="item-name ml-2 cursor-pointer hover:text-black transition delay-100">
               <div className="item-name break-all">
@@ -66,9 +83,9 @@ const Navbar = ({ addToCart, cart, removeFromCart, clearCart, subTotal }) => {
               </div>
               <div className="flex items-center place-content-around h-14">
                 <div className="qty flex items-center space-x-2">
-                  <FiPlusSquare onClick={() => { addToCart(k, 1, cart[k].price, cart[k].name, cart[k].size, cart[k].variant) }} className='text-2xl  hover:text-pink-300 transition delay-100' />
+                  <FiPlusSquare onClick={() => { addToCart(k, 1, cart[k].price, cart[k].name, cart[k].size, cart[k].variant, cart[k].img) }} className='text-2xl  hover:text-pink-300 transition delay-100' />
                   <input type="number" name="" value={cart[k].qty} id="" className='w-8 border-2 text-center border-gray-400 rounded' disabled={true} />
-                  <FiMinusSquare onClick={() => { removeFromCart(k, 1, cart[k].price, cart[k].name, cart[k].size, cart[k].variant) }} className='text-2xl  hover:text-pink-300 transition delay-100' />
+                  <FiMinusSquare onClick={() => { removeFromCart(k, 1, cart[k].price, cart[k].name, cart[k].size, cart[k].variant, cart[k].img) }} className='text-2xl  hover:text-pink-300 transition delay-100' />
                 </div>
                 <div className="price hover:text-pink-300 font-semibold transition delay-100">
                   {/* ₹ {cart[k].price} */}
